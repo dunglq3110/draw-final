@@ -1,6 +1,6 @@
 # Vector Shape Drawing Website
 
-This repository contains the code for a vector shape drawing website. This is a final IT project course that allows multiple users to draw and design vector shape art.
+This repository contains the code for a vector shape drawing website. This is a final IT project course that allows users to draw and design vector shape art.
 
 ## Reference
 
