@@ -33,7 +33,3 @@ To clone and run this project, follow these steps:
 
 Now, you should be able to access the application at [3000](http://localhost:3000).
 
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
