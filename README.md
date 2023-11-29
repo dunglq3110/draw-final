@@ -4,7 +4,7 @@ This repository contains the code for a vector shape drawing website. This is a 
 
 ## Reference
 
-This project was inspired by and references the [PaperGraper](https://github.com/w00dn/papergrapher/).
+This project was inspired by and referenced the [PaperGraper](https://github.com/w00dn/papergrapher/).
 
 ## Technologies Used
 
@@ -19,21 +19,24 @@ To clone and run this project, follow these steps:
 
 1. Clone the repository using the following command
 
-`git clone https://github.com/dunglq3110/draw-final.git`
+    ```shell
+    git clone https://github.com/dunglq3110/draw-final.git
+    ```
 
 2. Install all necessary packages:
 
-`npm i`
+    ```shell
+    npm install
+    ```
 
 3. Run server:
 
-`npm run dev`
-
-6. Start the application at localhost 3000:
+    ```shell
+    npm run dev
+    ```
 
 Now, you should be able to access the application at [3000](http://localhost:3000).
 
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
-
