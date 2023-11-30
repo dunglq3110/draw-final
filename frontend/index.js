@@ -1,24 +1,25 @@
-// const dotenv = require("dotenv");
-// const { cleanEnv, port } = require("envalid");
-// const express = require("express");
-// const app = express();
-// const path = require("path");
+const dotenv = require("dotenv");
+const { port, cleanEnv } = require("envalid");
+const express = require("express");
 
-// dotenv.config({ path: "../.env" });
+const app = express();
+const path = require("path");
 
-// const env = cleanEnv(process.env, {
-// 	CLIENT_PORT: port(),
-// });
+dotenv.config({ path: __dirname + "/./../.env" });
+const env = cleanEnv(process.env, {
+	CLIENT_PORT: port(),
+	SERVER_PORT: port(),
+});
 
-// app.set("views", "./views");
-// app.set("view engine", "ejs");
+app.set("views", "./views");
+app.set("view engine", "ejs");
 
-// app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "public")));
 
-// app.get("/", (req, res) => {
-// 	res.render("draw.ejs");
-// });
+app.get("/", (req, res) => {
+	res.render("draw.ejs");
+});
 
-// app.listen(env.CLIENT_PORT, () => {
-// 	console.log(`Application listening on port ${env.CLIENT_PORT}`);
-// });
+app.listen(env.CLIENT_PORT, () => {
+	console.log(`Listening on port ${env.CLIENT_PORT}`);
+});

@@ -1,109 +1,97 @@
+pg.document = (function () {
+	let center;
+	let clipboard = [];
 
-pg.document = function() {
-	var center;
-	var clipboard = [];
-
-	
-	var setup = function() {
-		paper.view.center = new paper.Point(0,0);
+	const setup = function () {
+		paper.view.center = new paper.Point(0, 0);
 		center = paper.view.center;
-		
+
 		// call DocumentUpdate at a reduced rate (every tenth frame)
-		var int = 10;
-		paper.view.onFrame = function() {
-			if(int > 0) {
+		let int = 10;
+		paper.view.onFrame = function () {
+			if (int > 0) {
 				int--;
 			} else {
-				jQuery(document).trigger('DocumentUpdate');
+				jQuery(document).trigger("DocumentUpdate");
 				int = 10;
 			}
 		};
-		
-		
-		window.onbeforeunload = (function(e) {
-			if(pg.undo.getStates().length > 1) {
-				return 'Unsaved changes will be lost. Leave anyway?';
+
+		window.onbeforeunload = function (e) {
+			if (pg.undo.getStates().length > 1) {
+				return "Unsaved changes will be lost. Leave anyway?";
 			}
-		});
+		};
 	};
-	
-	
-	var clear = function() {
+
+	const clear = function () {
 		paper.project.clear();
 		pg.undo.clear();
 		setup();
 		pg.layer.setup();
 	};
-	
-	
-	var getCenter = function() {
+
+	const getCenter = function () {
 		return center;
 	};
-	
-	
-	var getClipboard = function() {
-		return clipboard;	
+
+	const getClipboard = function () {
+		return clipboard;
 	};
-	
-	
-	var pushClipboard = function(item) {
+
+	const pushClipboard = function (item) {
 		clipboard.push(item);
 		return true;
 	};
-	
-	
-	var clearClipboard = function() {
+
+	const clearClipboard = function () {
 		clipboard = [];
 		return true;
 	};
-	
-	
-	var getAllSelectableItems = function() {
-		var allItems = pg.helper.getAllPaperItems();
-		var selectables = [];
-		for(var i=0; i<allItems.length; i++) {
-			if(allItems[i].data && !allItems[i].data.isHelperItem) {
-				selectables.push(allItems[i]);
+
+	const getAllSelectableItems = function () {
+		const allItems = pg.helper.getAllPaperItems();
+		let selectableItems = [];
+		for (const item of allItems) {
+			if (item.data && !item.data.isHelperItem) {
+				selectableItems.push(item);
 			}
 		}
-		return selectables;
+		return selectableItems;
 	};
-	
-	
-	var loadJSONDocument = function(jsonString) {
-		var activeLayerID = paper.project.activeLayer.data.id;
+
+	const loadJSONDocument = function (jsonString) {
+		const activeLayerID = paper.project.activeLayer.data.id;
 		paper.project.clear();
 		pg.toolbar.setDefaultTool();
 		pg.export.setExportRect();
 
 		paper.project.importJSON(jsonString);
-		
+
 		pg.layer.reinitLayers(activeLayerID);
 
-		var exportRect = pg.guides.getExportRectGuide();
-		if(exportRect) {
+		const exportRect = pg.guides.getExportRectGuide();
+		if (exportRect) {
 			pg.export.setExportRect(new paper.Rectangle(exportRect.data.exportRectBounds));
 		}
-		pg.undo.snapshot('loadJSONDocument');
+		pg.undo.snapshot("loadJSONDocument");
 	};
-	
-	
-	var saveJSONDocument = function() {
-		var fileName = prompt("Name your file", "export.json");
+
+	const saveJSONDocument = function () {
+		const fileName = prompt("Name your file", "export.json");
 
 		if (fileName !== null) {
 			pg.hover.clearHoveredItem();
 			pg.selection.clearSelection();
 			paper.view.update();
-			
-			var fileNameNoExtension = fileName.split(".json")[0];
-			var exportData = paper.project.exportJSON({ asString: true });
-			var blob = new Blob([exportData], {type: "text/json"});
-			saveAs(blob, fileNameNoExtension+'.json');
+
+			const fileNameNoExtension = fileName.split(".json")[0];
+			const exportData = paper.project.exportJSON({ asString: true });
+			const blob = new Blob([exportData], { type: "text/json" });
+			saveAs(blob, fileNameNoExtension + ".json");
 		}
 	};
-	
-	
+
 	return {
 		getCenter: getCenter,
 		setup: setup,
@@ -113,7 +101,6 @@ pg.document = function() {
 		clearClipboard: clearClipboard,
 		getAllSelectableItems: getAllSelectableItems,
 		loadJSONDocument: loadJSONDocument,
-		saveJSONDocument: saveJSONDocument
+		saveJSONDocument: saveJSONDocument,
 	};
-		
-}();
+})();

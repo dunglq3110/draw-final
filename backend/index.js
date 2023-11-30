@@ -1,9 +1,15 @@
-const CLIENT_PORT = 8080;
-const SERVER_PORT = 3000;
+const dotenv = require("dotenv");
+const { port, cleanEnv } = require("envalid");
 
-const io = require("socket.io")(SERVER_PORT, {
+dotenv.config({ path: __dirname + "/./../.env" });
+const env = cleanEnv(process.env, {
+	CLIENT_PORT: port(),
+	SERVER_PORT: port(),
+});
+
+const io = require("socket.io")(env.SERVER_PORT, {
 	cors: {
-		origin: [`http://localhost:${CLIENT_PORT}`],
+		origin: [`http://localhost:${env.CLIENT_PORT}`],
 	},
 });
 

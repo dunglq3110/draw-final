@@ -22,7 +22,7 @@ pg.toolbar = function() {
 				shortCutInfo = ' ('+(tool.usedKeys.toolbar).toUpperCase()+')';
 			}
 			var $tool = jQuery('<div class="tool_'+tool.id+' tool" data-id="'+tool.id+'" title="'+tool.name+shortCutInfo+'">');
-			$tool.css({'background-image': 'url(public/assets/tools/tool_'+tool.id+'.svg)'});
+			$tool.css({'background-image': 'url(assets/tools/tool_'+tool.id+'.svg)'});
 			$tool.click(function() {
 				switchTool(tool.id);
 			});

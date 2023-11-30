@@ -125,7 +125,7 @@ pg.codeEditor = function(){
 
 		$select.append($defaultOption);
 
-		jQuery.getJSON('public/user/scripts/scripts.json', function(data) {
+		jQuery.getJSON('user/scripts/scripts.json', function(data) {
 			jQuery.each(data.scripts, function(index, scriptID) {
 				var $option = jQuery('<option value="'+scriptID+'">'+scriptID+'.js</option>');
 				$select.append($option);
@@ -150,7 +150,7 @@ pg.codeEditor = function(){
 			jQuery('#codeEditorArea').val(defaultScript);
 		} else {
 			jQuery.ajax({
-				url: 'public/user/scripts/'+scriptID+'.js',
+				url: 'user/scripts/'+scriptID+'.js',
 				dataType: 'text',
 				success: function(data) {
 					jQuery('#codeEditorArea').val(data);

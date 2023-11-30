@@ -2,9 +2,9 @@ pg.text = function() {
 	var importedFonts = [];
 
 	var setup = function() {
-		jQuery.getJSON('public/fonts/fonts.json', function(data){
+		jQuery.getJSON('fonts/fonts.json', function(data){
 			jQuery.each(data.fonts, function(index, fontName) {
-				opentype.load('public/fonts/'+fontName, function (err, font) {
+				opentype.load('fonts/'+fontName, function (err, font) {
 					if (err) {
 						console.error(err);
 
