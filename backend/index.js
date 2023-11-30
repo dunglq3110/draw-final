@@ -8,7 +8,7 @@ const io = require("socket.io")(SERVER_PORT, {
 });
 
 io.on("connection", (socket) => {
-	console.log(`${new Date().toLocaleTimeString()}: ` + socket.id);
+	console.log(`${new Date().toLocaleTimeString()}: ${socket.id}`);
 
 	// socket.on("send-message", (message, room) => {
 	// 	if (room === "") {
