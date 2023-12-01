@@ -8,10 +8,6 @@ socket.on("connect", () => {
 
 let paperCanvas = document.getElementById("paperCanvas");
 
-paperCanvas.addEventListener("frame", (e) => {
-	console.log("Mouse moved");
-});
-
 paperCanvas.addEventListener("mouseup", (e) => {
 	let jsonString = {};
 
@@ -19,15 +15,6 @@ paperCanvas.addEventListener("mouseup", (e) => {
 
 	socket.emit("send-mouseup", jsonString);
 });
-
-document.querySelector("canvas").on = () => {
-	// 	let jsonString = {};
-
-	// 	jsonString = paper.project.exportJSON({ asString: true });
-
-	// 	socket.emit("send-mouseup", jsonString);
-	console.log("Hello");
-};
 
 socket.on("receive-mouseup", (jsonString) => {
 	const activeLayerID = paper.project.activeLayer.data.id;
