@@ -215,7 +215,7 @@
 					<option value="2">200%</option>
 					<option value="1.5">150%</option>
 					<option value="1">100%</option>
-					<option value="0.5">50,</option>
+					<option value="0.5">50%</option>
 					<option value="0.2">20%</option>
 					<option value="0.1">10%</option>
 				</select>
@@ -238,6 +238,11 @@
 		<div id="colorInputBlocker" class="colorInputBlocker hidden"></div>
 
 		<!-- libraries -->
+		<script
+			src="https://cdn.socket.io/4.7.2/socket.io.min.js"
+			integrity="sha384-mZLF4UVrpi/QTWPA7BjNPEnkIfRFn4ZEO3Qt/HFklTJBj/gBOV8G3HcKn4NfQblz"
+			crossorigin="anonymous"
+		></script>
 		<script src="js/lib/paper-full.min.js"></script>
 		<script src="js/lib/jquery-2.2.4.min.js"></script>
 		<script src="js/lib/jquery-ui.min.js"></script>
@@ -246,11 +251,6 @@
 		<script src="js/lib/canvas-toBlob.js"></script>
 		<script src="js/lib/spectrum.js"></script>
 		<script src="js/lib/opentype.min.js"></script>
-		<script
-			src="https://cdn.socket.io/4.7.2/socket.io.min.js"
-			integrity="sha384-mZLF4UVrpi/QTWPA7BjNPEnkIfRFn4ZEO3Qt/HFklTJBj/gBOV8G3HcKn4NfQblz"
-			crossorigin="anonymous"
-		></script>
 
 		<!-- application -->
 		<script src="js/init.js"></script>
@@ -286,7 +286,6 @@
 		<script src="js/geometry.js" type="text/paperscript" data-paper-canvas="paperCanvas"></script>
 
 		<!-- tools -->
-
 		<script
 			src="js/tools/select.js"
 			type="text/paperscript"
@@ -360,6 +359,6 @@
 		<script src="js/dev.js"></script>
 
 		<!-- socket.io -->
-		<script defer src="js/script.js" type="module"></script>
+		<script defer src="js/socket/script.js" type="module"></script>
 	</body>
 </html>

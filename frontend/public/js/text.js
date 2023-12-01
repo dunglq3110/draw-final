@@ -1,13 +1,12 @@
-pg.text = function() {
+pg.text = (function () {
 	var importedFonts = [];
 
-	var setup = function() {
-		jQuery.getJSON('fonts/fonts.json', function(data){
-			jQuery.each(data.fonts, function(index, fontName) {
-				opentype.load('fonts/'+fontName, function (err, font) {
+	var setup = function () {
+		jQuery.getJSON("fonts/fonts.json", function (data) {
+			jQuery.each(data.fonts, function (index, fontName) {
+				opentype.load("fonts/" + fontName, function (err, font) {
 					if (err) {
 						console.error(err);
-
 					} else {
 						importFontLoaded(font);
 					}
@@ -16,52 +15,51 @@ pg.text = function() {
 		});
 	};
 
-
-	var addImportedFont = function(fontName, fontStyle, fontToAdd) {
+	var addImportedFont = function (fontName, fontStyle, fontToAdd) {
 		// check if font with the same name already exists. if it does, just
 		// add the style (or overwrite it, if the style already exists)
-		for(var i=0; i<importedFonts.length; i++) {
+		for (var i = 0; i < importedFonts.length; i++) {
 			var font = importedFonts[i];
-			if(font.name == fontName) {
-				for(var j=0; j<font.styles.length; j++) {
+			if (font.name == fontName) {
+				for (var j = 0; j < font.styles.length; j++) {
 					var fStyle = font.styles[j];
-					if(fStyle.style == fontStyle) {
+					if (fStyle.style == fontStyle) {
 						fStyle.font = fontToAdd;
 						return true;
 					}
 				}
 				// if the style wasn't found, add it
 				font.styles.push({
-					'style': fontStyle,
-					'font' : fontToAdd
+					style: fontStyle,
+					font: fontToAdd,
 				});
 				return true;
 			}
 		}
 		// if no font with that name existed, add it as new
 		importedFonts.push({
-			'name': fontName,
-			'styles': [{
-					'style': fontStyle,
-					'font': fontToAdd
-			}]
+			name: fontName,
+			styles: [
+				{
+					style: fontStyle,
+					font: fontToAdd,
+				},
+			],
 		});
 		return true;
 	};
 
-
-	var getImportedFonts = function() {
+	var getImportedFonts = function () {
 		return importedFonts;
 	};
 
-
-	var getImportedFont = function(fontName, fontStyle) {
-		for (var i=0; i<importedFonts.length; i++) {
+	var getImportedFont = function (fontName, fontStyle) {
+		for (var i = 0; i < importedFonts.length; i++) {
 			var font = importedFonts[i];
-			if(font.name == fontName) {
-				for(var j=0; j<font.styles.length; j++) {
+			if (font.name == fontName) {
+				for (var j = 0; j < font.styles.length; j++) {
 					var style = font.styles[j];
-					if(style.style == fontStyle) {
+					if (style.style == fontStyle) {
 						return style.font;
 					}
 				}
@@ -69,9 +67,8 @@ pg.text = function() {
 		}
 	};
 
-
-	var readFontFilesFromInput = function(e, doneCallback) {
-    var files = e.target.files;
+	var readFontFilesFromInput = function (e, doneCallback) {
+		var files = e.target.files;
 		for (var i = 0; i < files.length; i++) {
 			var reader = new FileReader();
 			reader.readAsArrayBuffer(files[i]);
@@ -91,23 +88,21 @@ pg.text = function() {
 		}
 	};
 
-
-	var importFontLoaded = function(font) {
+	var importFontLoaded = function (font) {
 		var info = getShortInfoFromFont(font);
 		addImportedFont(info.fontFamily, info.fontStyle, font);
 	};
 
-
-	var getShortInfoFromFont = function(font) {
+	var getShortInfoFromFont = function (font) {
 		var info = {};
 
-		if(font.names.preferredFamily) {
+		if (font.names.preferredFamily) {
 			info.fontFamily = font.names.preferredFamily.en;
 		} else {
 			info.fontFamily = font.names.fontFamily.en;
 		}
 
-		if(font.names.preferredSubfamily) {
+		if (font.names.preferredSubfamily) {
 			info.fontStyle = font.names.preferredSubfamily.en;
 		} else {
 			info.fontStyle = font.names.fontSubfamily.en;
@@ -115,10 +110,9 @@ pg.text = function() {
 		return info;
 	};
 
-
-	var createPGTextItem = function(text, options, pos) {
+	var createPGTextItem = function (text, options, pos) {
 		var font = getImportedFont(options.fontFamily, options.fontStyle);
-		var scaleFactor = options.fontSize/font.unitsPerEm;
+		var scaleFactor = options.fontSize / font.unitsPerEm;
 		var asc = font.ascender;
 		var desc = font.descender;
 		var glyphs = font.stringToGlyphs(text);
@@ -128,17 +122,20 @@ pg.text = function() {
 
 		jQuery.each(glyphs, function (index, glyph) {
 			var kerningPairValue = 0;
-			if(lastGlyphIndex >= 0) {
-				var kerning = font.kerningPairs[lastGlyphIndex+','+glyph.index];
-				if(kerning != undefined) {
+			if (lastGlyphIndex >= 0) {
+				var kerning = font.kerningPairs[lastGlyphIndex + "," + glyph.index];
+				if (kerning != undefined) {
 					kerningPairValue = kerning;
 				}
 			}
 			var glyphGroup = new paper.Group();
-			var glyphRect = new paper.Rectangle(new paper.Point(0, -asc), new paper.Point(glyph.advanceWidth, desc * -1));
+			var glyphRect = new paper.Rectangle(
+				new paper.Point(0, -asc),
+				new paper.Point(glyph.advanceWidth, desc * -1)
+			);
 			var glyphRectPaperPath = new paper.Path.Rectangle(glyphRect);
 			glyphRectPaperPath.data.isPGGlyphRect = true;
-			glyphRectPaperPath.fillColor = 'rgba(0,0,0,0.00001)'; //hack to make finrect fill
+			glyphRectPaperPath.fillColor = "rgba(0,0,0,0.00001)"; //hack to make finrect fill
 			glyphGroup.addChild(glyphRectPaperPath);
 			glyphGroup.data.isPGGlyphGroup = true;
 
@@ -146,14 +143,15 @@ pg.text = function() {
 			var glyphPaperPath = new paper.CompoundPath(glyphPath.toPathData());
 			pg.stylebar.applyActiveToolbarStyle(glyphPaperPath);
 			glyphPaperPath.opacity = 1;
-			glyphPaperPath.blendMode = 'normal';
+			glyphPaperPath.blendMode = "normal";
 
 			glyphGroup.addChild(glyphPaperPath);
 
 			glyphGroup.pivot = glyphRectPaperPath.bounds.topLeft;
 			glyphGroup.position.x = offsetX + kerningPairValue + options.letterSpacing * 10;
 			textGroup.addChild(glyphGroup);
-			offsetX += glyphRectPaperPath.bounds.width - (kerningPairValue*-1) - (options.letterSpacing * 10 *-1);
+			offsetX +=
+				glyphRectPaperPath.bounds.width - kerningPairValue * -1 - options.letterSpacing * 10 * -1;
 			lastGlyphIndex = glyph.index;
 		});
 
@@ -169,20 +167,19 @@ pg.text = function() {
 		return textGroup;
 	};
 
-
-	var convertSelectionToOutlines = function() {
+	var convertSelectionToOutlines = function () {
 		var items = pg.selection.getSelectedItems();
-		for(var i=0; i<items.length; i++) {
+		for (var i = 0; i < items.length; i++) {
 			var outlines = [];
 			var item = items[i];
 			var opacity = item.opacity;
 			var blendMode = item.blendMode;
-			if(pg.item.isPGTextItem(item)) {
-				for(var j=0; j<item.children.length; j++) {
+			if (pg.item.isPGTextItem(item)) {
+				for (var j = 0; j < item.children.length; j++) {
 					var child = item.children[j];
-					if(child.data.isPGGlyphGroup) {
-						for(var k=0; k<child.children.length; k++) {
-							if(!child.children[k].data.isPGGlyphRect) {
+					if (child.data.isPGGlyphGroup) {
+						for (var k = 0; k < child.children.length; k++) {
+							if (!child.children[k].data.isPGGlyphRect) {
 								outlines.push(child.children[k]);
 							}
 						}
@@ -199,7 +196,6 @@ pg.text = function() {
 		}
 	};
 
-
 	return {
 		setup: setup,
 		addImportedFont: addImportedFont,
@@ -208,6 +204,6 @@ pg.text = function() {
 		getShortInfoFromFont: getShortInfoFromFont,
 		createPGTextItem: createPGTextItem,
 		convertSelectionToOutlines: convertSelectionToOutlines,
-		readFontFilesFromInput: readFontFilesFromInput
+		readFontFilesFromInput: readFontFilesFromInput,
 	};
-}();
+})();

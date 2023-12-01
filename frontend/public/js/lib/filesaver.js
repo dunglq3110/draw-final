@@ -12,7 +12,7 @@
 
 /*! @source http://purl.eligrey.com/github/FileSaver.js/blob/master/FileSaver.js */
 
-let saveAs =
+var saveAs =
 	saveAs ||
 	// IE 10+ (native saveAs)
 	(typeof navigator !== "undefined" &&

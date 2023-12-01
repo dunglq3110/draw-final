@@ -1,6 +1,5 @@
 // drawing tool
 // adapted from resources on http://paperjs.org
-
 pg.tools.registerTool({
 	id: "draw",
 	name: "Draw",
@@ -74,6 +73,7 @@ pg.tools.draw = function () {
 
 			for (var i = 0; i < lineCount; i++) {
 				var path = paths[i];
+
 				path = new Path();
 
 				path = pg.stylebar.applyActiveToolbarStyle(path);
@@ -86,7 +86,9 @@ pg.tools.draw = function () {
 			if (event.event.button > 0) return; // only first mouse button
 
 			var offset = event.delta;
+
 			offset.angle += 90;
+
 			for (var i = 0; i < lineCount; i++) {
 				var path = paths[i];
 				offset.length = options.lineDistance * i;

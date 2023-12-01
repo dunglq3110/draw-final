@@ -10,14 +10,14 @@ pg.tools.registerTool({
 
 pg.tools.text = function () {
 	var tool;
-	
+
 	var options = {
 		fontFamily: '',
 		fontStyle: '',
-		fontSize: 80,
+		fontSize: 36,
 		letterSpacing: 0
 	};
-	
+
 	var components = {
 		fontFamily: {
 			type: 'list',
@@ -45,19 +45,19 @@ pg.tools.text = function () {
 			label: 'Text'
 		}
 	};
-	
+
 	var textItem;
 	var toolMode = 'create';
 	var creationPoint;
 	var $textInput;
-	
+
 	var textSize = -1;
 	var textAngle = 0;
 
 	var activateTool = function () {
-		
+
 		var hitItem = null;
-				
+
 		var hitOptions = {
 			fill: true,
 			curves: true,
@@ -66,17 +66,17 @@ pg.tools.text = function () {
 
 		// get options from local storage if present
 		options = pg.tools.getLocalOptions(options);
-		
+
 		tool = new Tool();
 		creationPoint = paper.view.center;
-		
+
 		// if the user hasn't changed the colors yet, switching to the text
 		// tool will set the fillColor to black and the strokeColor to null
 		if (pg.stylebar.areColorsDefault()) {
 			pg.stylebar.setFillColor('rgb(0, 0, 0)');
 			pg.stylebar.setStrokeColor(null);
 		}
-		
+
 		tool.onMouseMove = function(event) {
 			var hitResult = paper.project.hitTest(event.point, hitOptions);
 			if(hitResult && hitResult.item) {
@@ -90,13 +90,13 @@ pg.tools.text = function () {
 				hitItem = null;
 			}
 		};
-		
-	 
+
+
 		tool.onMouseDown = function (event) {
 			if(toolMode === 'edit') {
 				finalizeInput();
 			}
-			
+
 			if(toolMode === 'create') {
 				toolMode = 'edit';
 				if(hitItem) {
@@ -107,7 +107,7 @@ pg.tools.text = function () {
 					rebuildFontStyleSelect();
 					rebuildFontSizeInput();
 					$textInput.focus();
-					
+
 				} else {
 					pg.selection.clearSelection();
 					createItem('', event.point);
@@ -116,33 +116,33 @@ pg.tools.text = function () {
 				pg.undo.snapshot('texteditstarted');
 			}
 		};
-		
-		
+
+
 		// setup floating tool options panel in the editor
 		pg.toolOptionPanel.setup(options, components, function(){
 			rebuildFontStyleSelect();
 			createItem(jQuery('#textToolInput').val(), creationPoint);
 			rebuildFontSizeInput();
-			
+
 		});
-		
+
 		// if there is a selected item, load its value to the options
 		var selectedItems = pg.selection.getSelectedItems();
 		if(selectedItems.length > 0 && selectedItems[0].data.isPGTextItem) {
 			handleSelectedItem(selectedItems[0]);
 			toolMode = 'edit';
 		}
-		
+
 		rebuildFamilySelect();
 		rebuildFontStyleSelect();
 		rebuildFontSizeInput();
 		setupFontImportSection();
 		setupInputField();
-		
+
 		tool.activate();
 	};
-	
-	
+
+
 	var handleSelectedItem = function(selectedItem) {
 		options.fontFamily = selectedItem.data.fontFamily;
 		options.fontStyle = selectedItem.data.fontStyle;
@@ -153,7 +153,7 @@ pg.tools.text = function () {
 		jQuery('#textToolInput').val(selectedItem.data.text);
 		creationPoint = selectedItem.position;
 		textItem = selectedItem;
-		
+
 		// save original scale and size (kinda...)
 		if(textItem) {
 			var helperCurve = getFirstCurve(textItem);
@@ -163,8 +163,8 @@ pg.tools.text = function () {
 			}
 		}
 	};
-	
-	
+
+
 	var createItem = function(text, pos) {
 		var wasScaled = false;
 		if(textItem) {
@@ -176,7 +176,7 @@ pg.tools.text = function () {
 		textItem = pg.text.createPGTextItem(text, options, pos);
 		textItem.data.wasScaled = wasScaled;
 		pg.stylebar.applyActiveToolbarStyle(textItem);
-		
+
 		// apply original rotation and scale to the new item
 		if(textItem) {
 			var helperCurve = getFirstCurve(textItem);
@@ -193,8 +193,8 @@ pg.tools.text = function () {
 			}
 		}
 	};
-	
-	
+
+
 	var getFirstCurve = function(item) {
 		for(var i=0; i<item.children.length; i++) {
 			for(var j=0; j<item.children[i].children.length; j++) {
@@ -205,7 +205,7 @@ pg.tools.text = function () {
 			}
 		}
 	};
-	
+
 	var setupFontImportSection = function() {
 		var $fontImportLabel = jQuery('<label>Import</label>');
 		var $fontImportButton = jQuery('<input id="fontImportInput" type="file" multiple accept=".ttf, .otf, .woff" >');
@@ -240,7 +240,7 @@ pg.tools.text = function () {
 			}
 			$familySelect.append($familyOption);
 		}
-		
+
 		// use fallback font if the one in the options isn't available anymore
 		if($familySelect.children('option[selected="selected"]').length <= 0) {
 			$familySelect.children('option').removeAttr('selected');
@@ -248,8 +248,8 @@ pg.tools.text = function () {
 			options.fontFamily = $familySelect.children('option').first().val();
 		}
 	};
-	
-	
+
+
 	var rebuildFontStyleSelect = function() {
 		var importedFonts = pg.text.getImportedFonts();
 		var $familySelect = jQuery('.toolOptionPanel select[name="fontFamily"]');
@@ -269,7 +269,7 @@ pg.tools.text = function () {
 				}
 			}
 		}
-		
+
 		// use fallback style if the one in the options isn't available anymore
 		if($styleSelect.children('option[selected="selected"]').length <= 0) {
 			$styleSelect.children('option').removeAttr('selected');
@@ -277,8 +277,8 @@ pg.tools.text = function () {
 			options.fontStyle = $styleSelect.children('option').first().val();
 		}
 	};
-	
-	
+
+
 	var rebuildFontSizeInput = function() {
 		if(textItem) {
 			var $sizeInput = jQuery('.toolOptionPanel input[name="fontSize"]');
@@ -294,7 +294,7 @@ pg.tools.text = function () {
 			}
 		}
 	};
-	
+
 	var setupInputField = function() {
 		$textInput = jQuery('#textToolInput');
 		$textInput.focus();
@@ -307,12 +307,12 @@ pg.tools.text = function () {
 		});
 	};
 
-	
+
 	var finalizeInput = function () {
 		var $textInput = jQuery('#textToolInput');
 		if ($textInput.val() === '') {
 			textItem.remove();
-			
+
 		} else {
 			creationPoint = paper.view.center;
 			textItem = null;
@@ -321,13 +321,13 @@ pg.tools.text = function () {
 		}
 		toolMode = 'create';
 	};
-	
-	
+
+
 	var deactivateTool = function () {
 		finalizeInput();
 	};
-		
-	
+
+
 	return {
 		options: options,
 		activateTool: activateTool,
